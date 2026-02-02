@@ -1,0 +1,6 @@
+[submodule "serial"]
+	path = serial
+	url = ../serial
+[submodule "ros2_robotiq_gripper"]
+	path = ros2_robotiq_gripper
+	url = ../ros2_robotiq_gripper

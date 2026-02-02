@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: robot_table_description
+    relative_path: urdf/robot_table.urdf.xacro
+  srdf:
+    relative_path: config/robot_table.srdf
+  package_settings:
+    author_name: Tamara Bergerhoff
+    author_email: tamara.bergerhoff@thws.de
+    generated_timestamp: 1769000294
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
