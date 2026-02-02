@@ -6,10 +6,7 @@
   <!--The driver already provides a control tag for the UR arm, we can directly include-->
   <xacro:include filename="$(find ur_robot_driver)/urdf/ur.ros2_control.xacro"/>
   <xacro:include filename="$(find robotiq_description)/urdf/2f_85.ros2_control.xacro"/>
-  <!--<xacro:include filename="$(find robotiq_description)/urdf/ur_to_robotiq_adapter.urdf.xacro"/>-->
-  <!--<xacro:include filename="$(find robotiq_description)/urdf/robotiq_2f_85_macro.urdf.xacro"/>-->
   
-
   <!--We need to specify the arguments used for parametrizing our description-->
   <xacro:arg name="ur_type" default="ur5e"/>
   <xacro:arg name="joint_limit_parameters_file" default="$(find ur_description)/config/$(arg ur_type)/joint_limits.yaml"/>

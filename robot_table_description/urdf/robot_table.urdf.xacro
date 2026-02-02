@@ -25,16 +25,4 @@
       <origin xyz="0 0 0.77526" rpy="0 0 0" />
   </xacro:robot_table>
 
- 
-  
-  <!--<xacro:robotiq_gripper
-    name="RobotiqGripper"
-    prefix=""
-    parent="ur5e_tool0"
-    com_port="/tmp/ttyUR"
-    use_fake_hardware="false"
-    include_ros2_control="true">
-    <origin xyz="0 0 0" rpy="0 0 0" /> 
-</xacro:robotiq_gripper>-->
-
 </robot>
