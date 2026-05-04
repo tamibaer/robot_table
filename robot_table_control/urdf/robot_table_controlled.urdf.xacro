@@ -34,7 +34,8 @@
     physical_parameters_file="$(arg physical_parameters_file)"
     visual_parameters_file="$(arg visual_parameters_file)"
   >
-    <origin xyz="0 0 0.77526" rpy="0 0 0" />
+    <!--<origin xyz="0 0 0.77526" rpy="0 0 0" />-->
+    <origin xyz="0 0 0.71676" rpy="0 0 0" />
   </xacro:robot_table>
 
   <!--Create the control tag for the UR robot-->

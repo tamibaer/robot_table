@@ -28,14 +28,16 @@
           <!--<mesh filename="file://$(find robot_table_description)/meshes/robo_table.dae"/>-->
           <mesh filename="package://robot_table_description/meshes/robo_table.dae"/>
         </geometry>
-        <origin xyz="0 0 -0.01" rpy="${pi/2} 0 0"/>
+        <!--<origin xyz="0 0 -0.01" rpy="${pi/2} 0 0"/>-->
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
       </visual>
       <collision>
         <geometry>
           <!--<mesh filename="file://$(find robot_table_description)/meshes/robo_table.dae"/>-->
           <mesh filename="package://robot_table_description/meshes/robo_table.dae"/>
         </geometry>
-        <origin xyz="0 0 -0.01" rpy="${pi/2} 0 0"/>
+        <!--<origin xyz="0 0 -0.01" rpy="${pi/2} 0 0"/>-->
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
       </collision>
     </link>
 
@@ -43,7 +45,7 @@
     <joint name="base_to_robot_mount" type="fixed">
       <parent link="table"/>
       <child link="robot_mount"/>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0 0 0.02" rpy="0 0 0" />
     </joint>
 
     <!--This will create the specific robot-->
@@ -74,9 +76,31 @@
     parent="robotiq_85_base"
     include_ros2_control="false">
     <origin xyz="0 0 0" rpy="0 0 0"/>
-</xacro:robotiq_gripper>
+  </xacro:robotiq_gripper>
   
-  
+<!--<link name="camera_link">
+  <visual>
+    <geometry>
+      <mesh filename="package://robot_table_description/meshes/intel_realsense_d415.dae"/>
+    </geometry>
+  </visual>
+  <collision>
+    <geometry>
+      <mesh filename="package://robot_table_description/meshes/intel_realsense_d415.dae"/>
+    </geometry>
+  </collision>
+  <inertial>
+    <mass value="0.01"/>
+    <origin xyz="0 0 0"/>
+    <inertia ixx="1e-6" iyy="1e-6" izz="1e-6"
+             ixy="0" ixz="0" iyz="0"/>
+  </inertial>
+</link>
 
+<joint name="camera_joint" type="fixed">
+  <parent link="ur5e_tool0"/>
+  <child link="camera_link"/>
+  <origin xyz="0.1 0.1 0.1" rpy="-${pi/2} 0 0"/>
+</joint>-->
 
 </robot>

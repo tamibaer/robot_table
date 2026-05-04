@@ -95,6 +95,8 @@
     </plugin>
   </gazebo>
 
+
+
   <!-- ros2 control instance -->
   <xacro:ur_ros2_control
     name="$(arg name)"
@@ -113,5 +115,35 @@
     >
     <origin xyz="0 0 0" rpy="0 0 0" /> 
   </xacro:robotiq_gripper>
+
+<!--ros2 camera instance -->
+<!--<gazebo reference="camera_link">
+  <sensor name="camera_link" type="depth_camera">
+    <always_on>1</always_on>
+    <update_rate>30</update_rate>
+    <visualize>true</visualize>
+
+    <topic>depth_camera</topic>
+
+    <camera>
+      <horizontal_fov>1.211</horizontal_fov>
+
+      <image>
+        <width>640</width>
+        <height>480</height>
+      </image>
+
+      <clip>
+        <near>0.05</near>
+        <far>10.0</far>
+      </clip>
+    </camera>
+
+    <plugin name="gz::sim::systems::Sensors"
+            filename="gz-sim-sensors-system">
+    </plugin>
+  </sensor>
+</gazebo> -->
+
 
 </robot>
