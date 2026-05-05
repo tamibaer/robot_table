@@ -2,7 +2,7 @@
 Software prerequisites:
 *TO DO*
 
-## Simulation
+## Simulation 🚀
 <img src="images/Gazebo_Sim.png" alt="Bildbeschreibung" style="width:100%;"/>
 
 Start Gazebo Simulation: 
@@ -26,6 +26,11 @@ ros2 launch robot_table_moveit_config move_group.launch.py
 Set MoveGroup Time to Simulator Time:
 ```bash
 ros2 param set /move_group use_sim_time true
+```
+
+🚀 Start Gazebo Simulation + Moveit MoveGroup + MoveGroup Simulator Time all at once 🚀:
+```bash
+ros2 launch robot_table_gazebo bringup_sim.launch.py
 ```
 
 Start Rviz:
@@ -80,14 +85,14 @@ How to spawn objects in Simulation:
 ros2 launch ros_gz_sim gz_spawn_model.launch.py file:=$HOME/ros2_ws/src/robot_table/robot_table_gazebo/objects/klotz.sdf x:=0.0 y:=0.0 z:=5.0 name:=Klotz
 ```
 
-## Mock Hardware
+## Mock Hardware ⚙️
 Before controlling the real robot, you can also test what would happen by visualizing the robot’s motions in rviz.
 
 ```bash
 ros2 launch robot_table_control start_robot.launch.py use_mock_hardware:=true launch_rviz:=false
 ```
 
-## Real Robot
+## Real Robot 🤖
 Listen to tool communication port: 
 ```bash
 ros2 launch robot_table_control ur_tool_communication.py
@@ -117,7 +122,8 @@ Start Moveit Rviz:
 ```bash
 ros2 launch robot_table_moveit_config moveit_rviz.launch.py 
 ```
-# Camera
+# Camera 📸
+
 ```bash
 ros2 launch realsense2_camera rs_launch.py 
 ```
