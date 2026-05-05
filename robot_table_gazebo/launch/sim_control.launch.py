@@ -51,15 +51,6 @@ from launch.actions import SetEnvironmentVariable
 
 def launch_setup(context, *args, **kwargs):
 
-    set_gz_resource_paths = [
-    SetEnvironmentVariable(
-            name="GZ_SIM_RESOURCE_PATH",
-            value="/opt/ros/jazzy/share:" +
-                  "/home/dattelpalmara/ros2_ws/install/robot_table_description/share" + ":" +
-                  "/home/dattelpalmara/ros2_ws/install/robotiq_description/share"
-        )
-    ]
-   
     # Initialize Arguments
     ur_type = LaunchConfiguration("ur_type")
     safety_limits = LaunchConfiguration("safety_limits")
@@ -72,8 +63,6 @@ def launch_setup(context, *args, **kwargs):
     activate_joint_controller = LaunchConfiguration("activate_joint_controller")
     initial_joint_controller = LaunchConfiguration("initial_joint_controller")
     description_file = LaunchConfiguration("description_file")
-    #launch_rviz = LaunchConfiguration("launch_rviz")
-    #rviz_config_file = LaunchConfiguration("rviz_config_file")
     gazebo_gui = LaunchConfiguration("gazebo_gui")
     world_file = LaunchConfiguration("world_file")
 
@@ -114,15 +103,6 @@ def launch_setup(context, *args, **kwargs):
         parameters=[{"use_sim_time": True}, robot_description],
     )
 
-    #rviz_node = Node(
-    #    package="rviz2",
-    #    executable="rviz2",
-    #    name="rviz2",
-    #    output="log",
-    #    arguments=["-d", rviz_config_file],
-    #    condition=IfCondition(launch_rviz),
-    #)
-
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
@@ -141,15 +121,6 @@ def launch_setup(context, *args, **kwargs):
         arguments=["robotiq_activation_controller", "-c", "controller_manager"]
     )
 
-    # Delay rviz start after `joint_state_broadcaster`
-    #delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-    #    event_handler=OnProcessExit(
-    #        target_action=joint_state_broadcaster_spawner,
-    #        on_exit=[rviz_node],
-    #    ),
-    #    condition=IfCondition(launch_rviz),
-    #)
-
     # There may be other controllers of the joints, but this is the initially-started one
     initial_joint_controller_spawner_started = Node(
         package="controller_manager",
@@ -157,14 +128,7 @@ def launch_setup(context, *args, **kwargs):
         arguments=[initial_joint_controller, "-c", "/controller_manager"],
         condition=IfCondition(activate_joint_controller),
     )
-    #initial_joint_controller_spawner_stopped = Node(
-    #    package="controller_manager",
-    #    executable="spawner",
-    #    arguments=[initial_joint_controller, "-c", "/controller_manager", "--stopped"],
-    #    condition=UnlessCondition(activate_joint_controller),
-    #)
 
-    # GZ nodes
     gz_spawn_entity = Node(
         package="ros_gz_sim",
         executable="create",
@@ -202,7 +166,7 @@ def launch_setup(context, *args, **kwargs):
         output="screen",
     )
 
-    nodes_to_start = set_gz_resource_paths + [
+    nodes_to_start = [
         robot_state_publisher_node,
         joint_state_broadcaster_spawner,
         robotiq_gripper_controller_spawner,
@@ -217,7 +181,7 @@ def launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
     declared_arguments = []
-    # UR specific arguments
+    
     declared_arguments.append(
         DeclareLaunchArgument(
             "ur_type",
