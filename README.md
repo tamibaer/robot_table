@@ -95,7 +95,7 @@ ros2 launch robot_table_control start_robot.launch.py use_mock_hardware:=true la
 ## Real Robot 🤖
 Listen to tool communication port: 
 ```bash
-ros2 launch robot_table_control ur_tool_communication.py
+ros2 launch robot_table_control ur_tool_communication.launch.py
 ```
 
 Start robot and gripper ros2 controller: 
