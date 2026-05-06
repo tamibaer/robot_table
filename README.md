@@ -122,6 +122,12 @@ Start Moveit Rviz:
 ```bash
 ros2 launch robot_table_moveit_config moveit_rviz.launch.py 
 ```
+
+🚀 Start Tool Communication + Robot & Gripper + URCap all at once 🚀:
+```bash
+ros2 launch robot_table_control bringup_real_robot.launch.py
+```
+
 # Camera 📸
 
 ```bash
