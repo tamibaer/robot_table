@@ -12,7 +12,9 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', glob('launch/*.py'))
+        ('share/' + package_name + '/launch', glob('launch/*.py')),
+        ('share/' + package_name + '/config', glob('config/*.yaml')),
+        ('share/' + package_name + '/urdf', glob('urdf/*.xacro') + glob('urdf/*.urdf')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -27,7 +29,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'dashboard_client = robot_table_control.dashboard_client:main'
+            'dashboard_client = robot_table_control.dashboard_client:main',
+            'robot_ready_gate = robot_table_control.robot_ready_gate:main'
         ],
     },
 )
