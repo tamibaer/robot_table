@@ -5,8 +5,11 @@ from launch.actions import IncludeLaunchDescription, RegisterEventHandler, Timer
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.substitutions import FindPackageShare
 from launch.substitutions import PathJoinSubstitution 
+from launch.event_handlers import OnProcessExit
+from launch_ros.actions import Node
 
-from launch.event_handlers import OnTopicEvent
+
+#from launch.event_handlers import OnTopicEvent
 
 def generate_launch_description():
     pkg_robot_table_control = FindPackageShare('robot_table_control')
@@ -44,14 +47,26 @@ def generate_launch_description():
             ])
         )
     )
+
+    robot_ready_gate = Node(
+        package='robot_table_control',
+        executable='robot_ready_gate',
+        output='screen'
+    )
         
     trigger_external_control = RegisterEventHandler(
+        OnProcessExit(
+            target_action=robot_ready_gate,
+            on_exit=[external_control_launch]
+        )
+    )
+    '''trigger_external_control = RegisterEventHandler(
         OnTopicEvent(
             topic='/robot_ready',
             trigger_on_arrival=True,
             on_event=[external_control_launch]
         )
-    )
+    )'''
 
     def check_ttyur(context, *args, **kwargs): 
         if os.path.exists("/tmp/ttyUR"):
