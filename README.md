@@ -133,3 +133,10 @@ ros2 launch robot_table_control bringup_real_robot.launch.py
 ```bash
 ros2 launch realsense2_camera rs_launch.py 
 ```
+
+
+# Foxglove
+
+```bash
+ros2 launch foxglove_bridge foxglove_bridge_launch.xml port:=8765
+```
