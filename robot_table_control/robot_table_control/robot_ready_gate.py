@@ -7,7 +7,7 @@ class RobotReadyGate(Node):
     def __init__(self):
         super().__init__('robot_ready_gate')
         self.client = self.create_client(Load, '/dashboard_client/load_program')
-        self.timer = self.create_timer(2.0, self.check_service)
+        self.timer = self.create_timer(5.0, self.check_service)
         self.get_logger().info("Waiting for /dashboard_client/load_program service...")
 
     def check_service(self):
