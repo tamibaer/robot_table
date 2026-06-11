@@ -1,30 +1,28 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Bool
+from ur_dashboard_msgs.srv import Load
+
 
 class RobotReadyGate(Node):
     def __init__(self):
         super().__init__('robot_ready_gate')
-        self.sub = self.create_subscription(
-            Bool,
-            '/robot_ready',
-            self.cb,
-            10
-        )
-        self.ready = False
+        self.client = self.create_client(Load, '/dashboard_client/load_program')
+        self.timer = self.create_timer(2.0, self.check_service)
+        self.get_logger().info("Waiting for /dashboard_client/load_program service...")
 
-    def cb(self, msg):
-        print("TESTTESTETTSTTSTSTSTSTSTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        if msg.data and not self.ready:
-            self.get_logger().info("Robot ready received → exiting gate node")
-            self.ready = True
+    def check_service(self):
+        if self.client.service_is_ready():
+            self.get_logger().info("Dashboard service is ready → triggering external control")
+            self.timer.cancel()
             rclpy.shutdown()
+
 
 def main():
     rclpy.init()
     node = RobotReadyGate()
     rclpy.spin(node)
     node.destroy_node()
+
 
 if __name__ == '__main__':
     main()
