@@ -31,13 +31,13 @@
         <joint name="robotiq_85_left_knuckle_joint" value="0"/>
     </group_state>
     <group_state name="close" group="robotiq_gripper">
-        <joint name="robotiq_85_left_knuckle_joint" value="0.8"/>
+        <joint name="robotiq_85_left_knuckle_joint" value="0.785398"/>
     </group_state>
-    <group_state name="test" group="ur5e_arm">
-        <joint name="ur5e_elbow_joint" value="0.0174"/>
-        <joint name="ur5e_shoulder_lift_joint" value="-1.6315"/>
-        <joint name="ur5e_shoulder_pan_joint" value="-0.4513"/>
-        <joint name="ur5e_wrist_1_joint" value="-1.5621"/>
+    <group_state name="home" group="ur5e_arm">
+        <joint name="ur5e_elbow_joint" value="0"/>
+        <joint name="ur5e_shoulder_lift_joint" value="-1.5708"/>
+        <joint name="ur5e_shoulder_pan_joint" value="0"/>
+        <joint name="ur5e_wrist_1_joint" value="-1.5708"/>
         <joint name="ur5e_wrist_2_joint" value="0"/>
         <joint name="ur5e_wrist_3_joint" value="0"/>
     </group_state>
