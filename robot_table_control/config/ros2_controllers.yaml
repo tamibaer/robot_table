@@ -87,7 +87,13 @@ force_torque_sensor_broadcaster:
       - torque.z
     frame_id: $(var tf_prefix)tool0
     topic_name: ft_data
-
+    sensor_filter_chain:
+      filter1:
+        name: low_pass
+        type: wrench_filters/LowPassFilter
+        params:
+          cutoff_frequency: 1.0
+          sampling_time: 500.0
 
 joint_trajectory_controller:
   ros__parameters:
