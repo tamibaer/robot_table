@@ -54,6 +54,12 @@ controller_manager:
     robotiq_activation_controller:
       type: robotiq_controllers/RobotiqActivationController
 
+    gravity_update_controller:
+      type: ur_controllers/GravityUpdateController
+
+    twist_controller:
+      type: ur_controllers/TwistController
+
     # The way this is currently implemented upstream doesn't really work for us. When using
     # position control, the robot will have a tracking error. However, limits will be enforced
     # from the currently reported position, effectively limiting the possible step size using the
@@ -232,3 +238,11 @@ robotiq_gripper_controller:
 robotiq_activation_controller:
   ros__parameters:
     default: true
+
+gravity_update_controller:
+  ros__parameters:
+    tf_prefix: "$(var tf_prefix)"
+
+twist_controller:
+  ros__parameters:
+    tf_prefix: "$(var tf_prefix)"
