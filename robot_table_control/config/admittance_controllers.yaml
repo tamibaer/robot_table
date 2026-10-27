@@ -1,0 +1,76 @@
+controller_manager:
+  ros__parameters:
+    admittance_controller:
+      type: admittance_controller/AdmittanceController
+
+admittance_controller:
+  ros__parameters:
+    joints:
+      - $(var tf_prefix)shoulder_pan_joint
+      - $(var tf_prefix)shoulder_lift_joint
+      - $(var tf_prefix)elbow_joint
+      - $(var tf_prefix)wrist_1_joint
+      - $(var tf_prefix)wrist_2_joint
+      - $(var tf_prefix)wrist_3_joint
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    chainable_command_interfaces:
+      - position
+      - velocity
+
+    kinematics:
+      plugin_name: kinematics_interface_kdl/KinematicsInterfaceKDL
+      plugin_package: kinematics_interface
+      base: $(var tf_prefix)base_link
+      tip: $(var tf_prefix)tool0
+      alpha: 0.0005
+
+    ft_sensor:
+      name: $(var tf_prefix)tcp_fts_sensor
+      frame:
+        id: $(var tf_prefix)tool0
+      filter_coefficient: 0.1
+
+    control:
+      frame:
+        id: $(var tf_prefix)base_link
+    fixed_world_frame:
+      frame:
+        id: $(var tf_prefix)base_link
+
+    gravity_compensation:
+      frame:
+        id: $(var tf_prefix)tool0
+      CoG:
+        pos: [0.0, 0.0, 0.0]
+        force: 0.0
+
+    admittance:
+      selected_axes: [true, true, true, false, false, false]  # erstmal nur Translation
+      mass: [3.0, 3.0, 3.0, 0.1, 0.1, 0.1]                    # kg bzw. kg m^2
+      damping_ratio: [1.5, 1.5, 1.5, 1.5, 1.5, 1.5]           # > 1: ueberdaempft, kein Nachschwingen
+      stiffness: [800.0, 800.0, 300.0, 30.0, 30.0, 30.0]      # N/m bzw. Nm/rad, z weich: ca. 3 N pro cm Eindringen
+      joint_damping: 5.0
+
+scaled_joint_trajectory_controller:
+  ros__parameters:
+    command_joints:
+      - admittance_controller/$(var tf_prefix)shoulder_pan_joint
+      - admittance_controller/$(var tf_prefix)shoulder_lift_joint
+      - admittance_controller/$(var tf_prefix)elbow_joint
+      - admittance_controller/$(var tf_prefix)wrist_1_joint
+      - admittance_controller/$(var tf_prefix)wrist_2_joint
+      - admittance_controller/$(var tf_prefix)wrist_3_joint
+
+forward_position_controller:
+  ros__parameters:
+    joints:
+      - admittance_controller/$(var tf_prefix)shoulder_pan_joint
+      - admittance_controller/$(var tf_prefix)shoulder_lift_joint
+      - admittance_controller/$(var tf_prefix)elbow_joint
+      - admittance_controller/$(var tf_prefix)wrist_1_joint
+      - admittance_controller/$(var tf_prefix)wrist_2_joint
+      - admittance_controller/$(var tf_prefix)wrist_3_joint

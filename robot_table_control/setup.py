@@ -30,7 +30,8 @@ setup(
     entry_points={
         'console_scripts': [
             'dashboard_client = robot_table_control.dashboard_client:main',
-            'robot_ready_gate = robot_table_control.robot_ready_gate:main'
+            'robot_ready_gate = robot_table_control.robot_ready_gate:main',
+            'activate_controllers = robot_table_control.activate_controllers:main'
         ],
     },
 )

@@ -1,9 +1,10 @@
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterFile
 from launch_ros.substitutions import FindPackageShare
+from robot_table_control.controller_config import write_controllers_file
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, OpaqueFunction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.conditions import IfCondition
 from launch.substitutions import (
@@ -47,6 +48,13 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument("launch_rviz", default_value="true", description="Launch RViz?")
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "use_admittance",
+            default_value="false",
+            description="Arm-Controller hinter den F/T-basierten admittance_controller haengen?",
+        )
+    )
 
     robotiq_gripper_controller_spawner = Node(
         package="controller_manager",
@@ -60,9 +68,15 @@ def generate_launch_description():
         arguments=["robotiq_activation_controller", "-c", "controller_manager"]
     )
 
-    return LaunchDescription(
-        declared_arguments
-        + [
+    def launch_robot(context):
+        use_admittance = LaunchConfiguration("use_admittance").perform(context) == "true"
+        overlays = ["ros2_controllers.yaml"]
+        if use_admittance:
+            overlays.append("admittance_controllers.yaml")
+        controllers_file = write_controllers_file(overlays)
+        print(f"Controller-Konfiguration: {controllers_file}")
+
+        actions = [
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(
                     [
@@ -93,15 +107,26 @@ def generate_launch_description():
                             "rsp.launch.py",
                         ]
                     ),
-                    "controllers_file": PathJoinSubstitution(
-                        [
-                            FindPackageShare("robot_table_control"),
-                            "config",
-                            "ros2_controllers.yaml",
-                        ]
-                    ),
+                    "controllers_file": controllers_file,
+                    "activate_joint_controller": "false" if use_admittance else "true",
                 }.items(),
-            ), 
+            ),
             robotiq_gripper_controller_spawner, robotiq_activation_controller_spawner
         ]
-    )
+        if use_admittance:
+            actions += [
+                Node(
+                    package="controller_manager",
+                    executable="spawner",
+                    arguments=["admittance_controller", "-c", "controller_manager", "--inactive"],
+                ),
+                Node(
+                    package="robot_table_control",
+                    executable="activate_controllers",
+                    arguments=["admittance_controller", "scaled_joint_trajectory_controller"],
+                    output="screen",
+                ),
+            ]
+        return actions
+
+    return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_robot)])
