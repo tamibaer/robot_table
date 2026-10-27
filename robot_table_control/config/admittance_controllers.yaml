@@ -26,37 +26,38 @@ admittance_controller:
       plugin_package: kinematics_interface
       base: $(var tf_prefix)base_link
       tip: $(var tf_prefix)tool0
-      alpha: 0.0005
+      alpha: 0.01                  # Daempfung der Pseudoinversen, robuster nahe Singularitaeten
 
     ft_sensor:
       name: $(var tf_prefix)tcp_fts_sensor
       frame:
-        id: $(var tf_prefix)tool0
-      filter_coefficient: 0.1
+        id: $(var tf_prefix)tool0  # stimmt nur, wenn der TCP-Offset im Pendant 0 ist (siehe unten)
+      filter_coefficient: 0.1      # ca. 4,5 Hz Grenzfrequenz bei 500 Hz, weniger Ruhezittern
 
     control:
       frame:
-        id: $(var tf_prefix)base_link
+        id: $(var tf_prefix)base_link   # z = senkrecht zum Tisch
     fixed_world_frame:
       frame:
-        id: $(var tf_prefix)base_link
+        id: $(var tf_prefix)base_link   # Roboter steht aufrecht, Schwerkraft zeigt in -z
 
     gravity_compensation:
       frame:
         id: $(var tf_prefix)tool0
       CoG:
         pos: [0.0, 0.0, 0.0]
-        force: 0.0
+        force: 0.0                 # 0, weil der UR die Payload aus dem Pendant schon herausrechnet
 
     admittance:
-      selected_axes: [true, true, true, false, false, false]  # erstmal nur Translation
-      mass: [3.0, 3.0, 3.0, 0.1, 0.1, 0.1]                    # kg bzw. kg m^2
-      damping_ratio: [1.5, 1.5, 1.5, 1.5, 1.5, 1.5]           # > 1: ueberdaempft, kein Nachschwingen
-      stiffness: [800.0, 800.0, 300.0, 30.0, 30.0, 30.0]      # N/m bzw. Nm/rad, z weich: ca. 3 N pro cm Eindringen
-      joint_damping: 5.0
+      selected_axes: [true, true, true, false, false, false]
+      mass: [5.0, 5.0, 6.0, 0.1, 0.1, 0.1]
+      damping_ratio: [2.0, 2.0, 4.5, 1.5, 1.5, 1.5]
+      stiffness: [1500.0, 1500.0, 1200.0, 30.0, 30.0, 30.0]
+      joint_damping: 10.0
 
 scaled_joint_trajectory_controller:
   ros__parameters:
+    interpolate_from_desired_state: true
     command_joints:
       - admittance_controller/$(var tf_prefix)shoulder_pan_joint
       - admittance_controller/$(var tf_prefix)shoulder_lift_joint

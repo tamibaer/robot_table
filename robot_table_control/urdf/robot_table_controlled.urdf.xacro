@@ -63,6 +63,7 @@
     com_port="$(arg com_port)"
     use_fake_hardware="$(arg use_mock_hardware)"
     include_ros2_control="true"
+    gripper_speed_multiplier="0.4"
   >
     <origin xyz="0 0 0" rpy="0 0 0" /> 
   </xacro:robotiq_gripper>
